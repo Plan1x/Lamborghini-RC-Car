@@ -1,0 +1,61 @@
+/*
+ * Structs.c
+ *
+ *  Created on: Jun 22, 2024
+ *      Author: irubt
+ */
+#include "Structs.h"
+
+static void GPIO_SET(motor_hw *val);
+static void GPIO_RESET(motor_hw *val);
+
+static void GPIO_SET(motor_hw *val) {
+	HAL_GPIO_WritePin(val->GPIO_Port, val->GPIO_Pin, GPIO_PIN_SET);
+}
+
+static void GPIO_RESET(motor_hw *val) {
+	HAL_GPIO_WritePin(val->GPIO_Port, val->GPIO_Pin, GPIO_PIN_RESET);
+}
+
+void Driver(Car *machine)
+{
+	switch (machine->rx_buff[0])
+	{
+	case Forward:
+		GPIO_SET(&(machine -> back.val_1)); //move forward
+		GPIO_RESET(&(machine -> back.val_2));
+		GPIO_RESET(&(machine -> front.val_1));
+		GPIO_RESET(&(machine -> front.val_2));
+		break;
+
+	case Back:
+		GPIO_SET(&(machine -> back.val_2)); // move back
+		GPIO_RESET(&(machine -> back.val_1));
+		GPIO_RESET(&(machine -> front.val_1));
+		GPIO_RESET(&(machine -> front.val_2));
+		break;
+
+	case Left:
+		GPIO_SET(&(machine -> back.val_1)); //move left
+		GPIO_SET(&(machine -> front.val_1));
+		GPIO_RESET(&(machine -> back.val_2));
+		GPIO_RESET(&(machine -> front.val_2));
+		break;
+
+	case Right:
+		GPIO_SET(&(machine -> back.val_1)); //move right
+		GPIO_SET(&(machine -> front.val_2));
+		GPIO_RESET(&(machine -> back.val_2));
+		GPIO_RESET(&(machine -> front.val_1));
+		break;
+
+	default:
+		GPIO_RESET(&(machine -> back.val_1));
+		GPIO_RESET(&(machine -> back.val_2));
+
+		GPIO_RESET(&(machine -> front.val_1));
+		GPIO_RESET(&(machine -> front.val_2));
+		break;
+
+	}
+}

@@ -1,0 +1,50 @@
+/*
+ * Structs.h
+ *
+ *  Created on: Jun 22, 2024
+ *      Author: irubt
+ */
+
+#ifndef INC_STRUCTS_H_
+#define INC_STRUCTS_H_
+#include "main.h"
+#include "LoRa.h"
+
+/*
+  	BTN_UP = 0x01,
+	BTN_DOWN = 0x02,
+	BTN_RIGHT = 0x04,
+	BTN_LEFT = 0x03
+*/
+typedef enum
+{
+	Forward = 0x01,
+	Back = 0x02,
+	Left = 0x03,
+	Right = 0x04
+}Driving;
+typedef struct
+{
+	U16 GPIO_Pin;
+	GPIO_TypeDef* GPIO_Port;
+
+}motor_hw;
+typedef struct
+{
+	motor_hw val_1;
+	motor_hw val_2;
+
+}motor;
+typedef struct
+{
+	motor front;
+	motor back;
+	LoRa Lora_rx;
+	U8 rx_buff[1];
+}Car;
+
+
+void Driver(Car * machine);
+
+
+#endif /* INC_STRUCTS_H_ */
